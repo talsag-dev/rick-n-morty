@@ -139,7 +139,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 };
 
 const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
-  <div className="flex flex-col gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
+  <div className="flex flex-col items-center gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
     <Image
       width={200}
       height={200}
@@ -153,7 +153,7 @@ const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
     >
       {character.name}
     </Link>
-    <div className="space-y-1 text-gray-600">
+    <div className="space-y-1 text-white">
       <p>Type: {character.type || "Unknown"}</p>
       <p>Gender: {character.gender}</p>
       <p>Species: {character.species}</p>
