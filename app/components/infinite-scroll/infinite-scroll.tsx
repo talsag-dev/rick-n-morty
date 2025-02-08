@@ -149,8 +149,8 @@ const CharacterCard: React.FC<{
   character: Character;
 }> = ({ character }) => {
   const { addToFavorites, removeFromFavorites, favorites } = useDataStore();
-  const handleAddToFavs = (character: Character) => {
-    if (favorites.includes(character)) {
+  const handleChangeFavs = (character: Character) => {
+    if (favorites.some((char) => char.id === character.id)) {
       removeFromFavorites(character.id);
     } else {
       addToFavorites(character);
@@ -178,7 +178,7 @@ const CharacterCard: React.FC<{
       </div>
 
       <div
-        onClick={() => handleAddToFavs(character)}
+        onClick={() => handleChangeFavs(character)}
         className="cursor-pointer"
       >
         <Heart
