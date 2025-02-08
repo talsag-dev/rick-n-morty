@@ -10,8 +10,8 @@ export const FilterPanel: React.FC = () => {
     setFilter("gender", gender);
   };
 
-  const handleChangeType = (type: string) => {
-    setFilter("type", type);
+  const handleChangeType = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilter("type", e.target.value);
   };
 
   const handleChangeSpices = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -70,10 +70,10 @@ export const FilterPanel: React.FC = () => {
           type="text"
           placeholder="Type"
           id="male"
+          value={filterMap["type"]}
           name="gender"
           className="border border-white bg-inherit p-4 focus:outline-black"
-          checked={filterMap["gender"] === "Male"}
-          onChange={() => handleChangeType("Male")}
+          onChange={(e) => handleChangeType(e)}
         />
       </div>
 

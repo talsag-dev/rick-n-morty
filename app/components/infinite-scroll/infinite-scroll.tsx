@@ -24,12 +24,10 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  // Initialize store with server-side data
   useEffect(() => {
     setData(initialData);
   }, [initialData, setData]);
 
-  // Handle search param changes - reset and fetch new data
   useEffect(() => {
     const name = searchParams.get("name") || initialSearchName;
     const page = parseInt(searchParams.get("page") || "1");
@@ -119,7 +117,9 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     const { gender, species, type } = filter;
     return data.filter((character) => {
       const matchesGender = !gender || character.gender === gender;
-      const matchesType = !type || character.type.includes(type);
+      const matchesType =
+        !type ||
+        (character.type?.toLowerCase() || "").includes(type.toLowerCase());
       const matchesSpecies =
         species.length === 0 || species.includes(character.species);
       return matchesGender && matchesType && matchesSpecies;
@@ -139,7 +139,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 };
 
 const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
-  <div className="flex flex-col items-center gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
+  <div className="flex flex-col gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
     <Image
       width={200}
       height={200}
@@ -153,7 +153,7 @@ const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
     >
       {character.name}
     </Link>
-    <div className="space-y-1 text-white">
+    <div className="space-y-1 text-gray-600">
       <p>Type: {character.type || "Unknown"}</p>
       <p>Gender: {character.gender}</p>
       <p>Species: {character.species}</p>
@@ -163,6 +163,6 @@ const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
 
 const LoadingIndicator: React.FC = () => (
   <div className="flex justify-center py-4">
-    <p className="text-white">Loading more characters...</p>
+    <p className="text-gray-500">Loading more characters...</p>
   </div>
 );

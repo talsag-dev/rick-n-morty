@@ -5,7 +5,7 @@ import { create } from "zustand";
 export interface Filters {
   species: string[];
   gender: string | null;
-  type: string | null;
+  type: string;
 }
 
 interface DataState {
@@ -25,7 +25,7 @@ export const useDataStore = create<DataState>((set) => ({
   loading: false,
   error: null,
   filter: {
-    type: null,
+    type: "",
     gender: null,
     species: [],
   },
@@ -44,7 +44,7 @@ export const useDataStore = create<DataState>((set) => ({
       filter: {
         gender: null,
         species: [],
-        type: null,
+        type: "",
       },
     }),
 }));
