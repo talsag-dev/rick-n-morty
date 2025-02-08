@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useDataStore } from "../../store/index";
 import Image from "next/image";
 import Link from "next/link";
+import { Heart } from "lucide-react";
 
 interface InfiniteScrollProps {
   initialData: Character[];
@@ -18,7 +19,8 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   initialSearchName,
 }) => {
   const searchParams = useSearchParams();
-  const { data, setData, setLoading, setError, filter } = useDataStore();
+  const { data, setData, setLoading, setError, filter, favorites } =
+    useDataStore();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -114,7 +116,8 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   }, [loadMore, isLoadingMore, hasMore]);
 
   const filteredData = useMemo(() => {
-    const { gender, species, type } = filter;
+    const { gender, species, type, favorites: favoritesIndicator } = filter;
+
     return data.filter((character) => {
       const matchesGender = !gender || character.gender === gender;
       const matchesType =
@@ -122,9 +125,13 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
         (character.type?.toLowerCase() || "").includes(type.toLowerCase());
       const matchesSpecies =
         species.length === 0 || species.includes(character.species);
-      return matchesGender && matchesType && matchesSpecies;
+
+      const matchesFavorites =
+        !favoritesIndicator || favorites.some((fav) => fav.id === character.id);
+
+      return matchesGender && matchesType && matchesSpecies && matchesFavorites;
     });
-  }, [data, filter]);
+  }, [data, filter, favorites]);
 
   return (
     <div className="p-4">
@@ -138,28 +145,49 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   );
 };
 
-const CharacterCard: React.FC<{ character: Character }> = ({ character }) => (
-  <div className="flex flex-col items-center gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
-    <Image
-      width={200}
-      height={200}
-      alt={`${character.name} image`}
-      src={character.image}
-      className="rounded-md"
-    />
-    <Link
-      href={`character/${character.id}`}
-      className="text-lg font-semibold hover:underline"
-    >
-      {character.name}
-    </Link>
-    <div className="space-y-1 text-white">
-      <p>Type: {character.type || "Unknown"}</p>
-      <p>Gender: {character.gender}</p>
-      <p>Species: {character.species}</p>
+const CharacterCard: React.FC<{
+  character: Character;
+}> = ({ character }) => {
+  const { addToFavorites, removeFromFavorites, favorites } = useDataStore();
+  const handleAddToFavs = (character: Character) => {
+    if (favorites.includes(character)) {
+      removeFromFavorites(character.id);
+    } else {
+      addToFavorites(character);
+    }
+  };
+  return (
+    <div className="flex flex-col items-center gap-4 rounded-lg border p-4 transition-shadow hover:shadow-lg">
+      <Image
+        width={200}
+        height={200}
+        alt={`${character.name} image`}
+        src={character.image}
+        className="rounded-md"
+      />
+      <Link
+        href={`character/${character.id}`}
+        className="text-lg font-semibold hover:underline"
+      >
+        {character.name}
+      </Link>
+      <div className="space-y-1 text-white">
+        <p>Type: {character.type || "Unknown"}</p>
+        <p>Gender: {character.gender}</p>
+        <p>Species: {character.species}</p>
+      </div>
+
+      <div
+        onClick={() => handleAddToFavs(character)}
+        className="cursor-pointer"
+      >
+        <Heart
+          className={`${favorites.some((fav) => fav.id === character.id) ? `fill-white` : null}`}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const LoadingIndicator: React.FC = () => (
   <div className="flex justify-center py-4">

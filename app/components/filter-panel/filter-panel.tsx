@@ -19,6 +19,10 @@ export const FilterPanel: React.FC = () => {
     setFilter("species", spices);
   };
 
+  const handleChangeFavorites = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilter("favorites", e.target.checked);
+  };
+
   const speciesOptions = useMemo(
     () =>
       data
@@ -95,9 +99,19 @@ export const FilterPanel: React.FC = () => {
         </select>
       </div>
 
+      <div className="my-6 flex flex-row items-center gap-4 accent-black">
+        <p>Favorites Only :</p>
+        <input
+          onChange={handleChangeFavorites}
+          checked={filterMap["favorites"]}
+          className="h-4 w-4"
+          type="checkbox"
+        />
+      </div>
+
       <div className="flex flex-row">
         <button
-          className="mt-4 h-[40px] w-full border border-white bg-inherit"
+          className="h-[40px] w-full border border-white bg-inherit"
           type="button"
           onClick={resetFilters}
         >
