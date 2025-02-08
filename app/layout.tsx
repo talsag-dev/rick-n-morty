@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { FloatingHomeButton } from "./components/home-button";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +35,9 @@ export default function RootLayout({
             Rick And Morty Characters Search <span>🤖</span>
           </p>
         </div>
-        {children}
+        <div className="mt-20">{children}</div>
+
+        <FloatingHomeButton />
       </body>
     </html>
   );

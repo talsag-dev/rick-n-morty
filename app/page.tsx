@@ -14,7 +14,7 @@ export default async function Home({
   const initialData = await getCharactersByQuery(page, name);
 
   return (
-    <div className="mt-10 grid grid-cols-4">
+    <div className="grid grid-cols-4">
       <Explorer initialData={initialData} name={name} />
     </div>
   );
